@@ -1,6 +1,6 @@
 ## Project: Item Catalog
 
-#### APP URL: http://52.221.231.64.xip.io/ OR http://52.221.231.64/ (OAuth wont work).
+#### APP URL: http://52.221.231.64.xip.io/ OR http://52.221.231.64/ (OAuth won't work).
 
 #### Description
 This is the fifth project in Udacity's Full Stack Web Developer Nanodegree Program.
@@ -9,8 +9,19 @@ This is the final project for "Full Stack Web Developer Nanodegree" on Udacity. 
 
 Deployed URL: http://52.221.231.64.xip.io/
 
+#### SSH Key
+Use the attached udacityAWS to ssh into the hosting machine.
+
+You have to use port 2200 for ssh, as the default ssh port 22 is denied using ufw. Also make sure you give correct permission to the key file before doing ssh.
+Such as ``` chmod 400 udacityAWS ```.
+
+You have to connect via the user **grader** and the public ip is **52.221.231.64**. The ssh command is as follows.
+```
+ssh -i udacityAWS grader@52.221.231.64 -p 2200
+```
+
 ---
-#### Things to have/do before running the code
+#### How Did I Do The Setup
 ##### Referrals
 1. [Configuring Linux Web Servers](https://www.udacity.com/course/configuring-linux-web-servers--ud299)
 2. [How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
@@ -48,10 +59,15 @@ Deployed URL: http://52.221.231.64.xip.io/
 3. Reload SSH using ```service ssh restart```
 4. Use the new key to ssh ```ssh -i privateKeyFilename] grader@YOUR-SERVER-PUBLIC-IP```
 
+##### Disable Root Login
+```sudo nano /etc/ssh/sshd_config``` and modify ```PermitRootLogin``` line to  ```PermitRootLogin no```
+
 ###### Update Your APT-GET
 ```
 sudo apt-get update
 sudo apt-get upgrade
+# if there are some packages left back, execute the following command
+sudo apt-get --with-new-pkgs upgrade
 ```
 
 ###### Change the SSH port from 22 to 2200
@@ -91,23 +107,23 @@ sudo ufw status
 2. Login as user "postgres" ```sudo su - postgres```
 3. Get into postgreSQL shell ```psql```
 4. Create a new database named catalog and create a new user named catalog in postgreSQL shell
-	```
-	postgres=# CREATE DATABASE catalog;
-	postgres=# CREATE USER catalog;
-	```
+```
+postgres=# CREATE DATABASE catalog;
+postgres=# CREATE USER catalog;
+```
 5. Set a password for user catalog
-	```
-	postgres=# ALTER ROLE catalog WITH PASSWORD 'password';
-	```
+```
+postgres=# ALTER ROLE catalog WITH PASSWORD 'password';
+```
 6. Give user "catalog" permission to "catalog" application database
-	```
-	postgres=# GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;
-	```
+```
+postgres=# GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog;
+```
 7. Quit postgreSQL `postgres=# \q`
 8. Exit from user "postgres" 
-	```
-	exit
-	```
+```
+exit
+```
 
 
 ###### Installing GIT & Clone
@@ -118,11 +134,11 @@ sudo ufw status
 	* ```sudo pip install sqlalchemy flask-sqlalchemy psycopg2-binary bleach requests```
 	* ```sudo pip install flask packaging oauth2client redis passlib flask-httpauth```
   * If you get an error about "unsupported locale setting"
-    * ```
-      export LC_ALL="en_US.UTF-8"
-      export LC_CTYPE="en_US.UTF-8"
-      sudo dpkg-reconfigure locales
-      ```
+```
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+sudo dpkg-reconfigure locales
+```
 13. Install psycopg2 ```sudo apt-get -qqy install postgresql python-psycopg2```
 14. Create database schema ```sudo python database_setup.py```
 
@@ -131,47 +147,47 @@ sudo ufw status
 
 1. Create YOUR_APP.conf to edit: ```sudo nano /etc/apache2/sites-available/YOUR_APP.conf```
 2. Add the following lines of code to the file to configure the virtual host. 
-	```
-	<VirtualHost *:80>
-		ServerName SERVER_IP
-		ServerAdmin ADMIN_EMAIL
-		WSGIScriptAlias / /var/www/YOUR_APP/YOUR_APP.wsgi
-		<Directory /var/www/YOUR_APP/YOUR_APP/>
-			Order allow,deny
-			Allow from all
-		</Directory>
-		Alias /static /var/www/YOUR_APP/YOUR_APP/static
-		<Directory /var/www/YOUR_APP/YOUR_APP/static/>
-			Order allow,deny
-			Allow from all
-		</Directory>
-		ErrorLog ${APACHE_LOG_DIR}/error.log
-		LogLevel warn
-		CustomLog ${APACHE_LOG_DIR}/access.log combined
-	</VirtualHost>
-	```
+```
+<VirtualHost *:80>
+    ServerName SERVER_IP
+    ServerAdmin ADMIN_EMAIL
+    WSGIScriptAlias / /var/www/YOUR_APP/YOUR_APP.wsgi
+    <Directory /var/www/YOUR_APP/YOUR_APP/>
+    Order allow,deny
+    Allow from all
+    </Directory>
+    Alias /static /var/www/YOUR_APP/YOUR_APP/static
+    <Directory /var/www/YOUR_APP/YOUR_APP/static/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
 3. Enable the virtual host with the following command: ```sudo a2ensite YOUR_APP.conf```
 
 ###### Create the .wsgi File
 1. Create the .wsgi File under /var/www/YOUR_APP: 
-	```
-	cd /var/www/YOUR_APP
-	sudo nano YOUR_APP.wsgi 
-	```
+```
+cd /var/www/YOUR_APP
+sudo nano YOUR_APP.wsgi 
+```
 2. Add the following lines of code to the flaskapp.wsgi file:
-	```
-	#!/usr/bin/python
-	import sys
-	import logging
-	logging.basicConfig(stream=sys.stderr)
-	sys.path.insert(0,"/var/www/YOUR_APP/")
+```
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/YOUR_APP/")
 
-	from YOUR_APP import app as application
-	application.secret_key = 'super_secret_key'
-	```
+from YOUR_APP import app as application
+application.secret_key = 'super_secret_key'
+```
 
 ###### Update Code
-* Rename your main application file to ```__init.py__``` (For example: application.py to ```__init__.py```)
+* Rename your main application file to ```__init__.py``` (For example: application.py to ```__init__.py```)
 * Change the DB code, replace the code with your existing code for DB connection ```postgresql://catalog:password@localhost/catalog'```
 
 ###### Restart Apache
