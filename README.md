@@ -1,5 +1,7 @@
 ## Project: Item Catalog
 
+#### APP URL: http://52.221.231.64.xip.io/ OR http://52.221.231.64/ (OAuth wont work).
+
 #### Description
 This is the fourth project in Udacity's Full Stack Web Developer Nanodegree Program.
 
@@ -46,10 +48,11 @@ Deployed URL: http://52.221.231.64.xip.io/
 3. Reload SSH using ```service ssh restart```
 4. Use the new key to ssh ```ssh -i privateKeyFilename] grader@YOUR-SERVER-PUBLIC-IP```
 
-## Update all currently installed packages
-
-	sudo apt-get update
-	sudo apt-get upgrade
+###### Update Your APT-GET
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
 
 ###### Change the SSH port from 22 to 2200
 
