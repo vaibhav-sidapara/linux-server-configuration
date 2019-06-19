@@ -65,14 +65,14 @@ __Note:__ Remember to add and save port 2200 with _Application __as__ Custom and
 
 Configure the Uncomplicated Firewall (UFW) to only allow incoming connections for SSH (port 2200), HTTP (port 80), and NTP (port 123)
 ```
-	sudo ufw allow ssh
-  sudo ufw allow www
-  sudo ufw allow ntp
-  sudo ufw allow 2200/tcp
-	sudo ufw allow 80/tcp
-	sudo ufw allow 123/udp
-	sudo ufw enable 
-  sudo ufw status
+sudo ufw allow ssh
+sudo ufw allow www
+sudo ufw allow ntp
+sudo ufw allow 2200/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 123/udp
+sudo ufw enable 
+sudo ufw status
  ```
  
 ###### Configure the local timezone to UTC
@@ -159,7 +159,6 @@ Configure the Uncomplicated Firewall (UFW) to only allow incoming connections fo
 	sudo nano YOUR_APP.wsgi 
 	```
 2. Add the following lines of code to the flaskapp.wsgi file:
-	
 	```
 	#!/usr/bin/python
 	import sys
@@ -171,11 +170,19 @@ Configure the Uncomplicated Firewall (UFW) to only allow incoming connections fo
 	application.secret_key = 'super_secret_key'
 	```
 
-###### Restart Apache
-1. Restart Apache `sudo service apache2 restart
+###### Update Code
+* Rename your main application file to ```__init.py__``` (For example: application.py to ```__init__.py```)
+* Change the DB code, replace the code with your existing code for DB connection ```postgresql://catalog:password@localhost/catalog'```
 
-###### It's running; let's use it!
+###### Restart Apache
+Restart Apache ```sudo service apache2 restart```
+
+##### It's running; let's use it!
 
 Once your instance has started up, you can access it via a browser via the public ip of your instance
 
-Note: When you set up OAuth for your application, you will need a DNS name that refers to your instance's IP address. You can use the xip.io service to get one; this is a public service offered for free by Basecamp. For instance, the DNS name YOUR_PUBLIC_IP.xip.io refers to the server above.
+For example my public ip is http://52.221.231.64
+
+When you set up OAuth for your application, you will need a DNS name that refers to your instance's IP address. You can use the xip.io service to get one; this is a public service offered for free by Basecamp. For instance, the DNS name YOUR_PUBLIC_IP.xip.io refers to the server above.
+
+So my URL will http://52.221.231.64.xip.io/. You just need to add the xip.io URL part in the end incase if you don't want to understand xip.io's magic domain name that provides wildcard DNS for any IP address.
